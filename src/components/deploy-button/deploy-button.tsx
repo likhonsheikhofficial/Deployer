@@ -1,34 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify"; // Removed ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 
 import { deployProviders } from '../../../utils/constants';
 import { deployToVercel, deployToNetlify, deployToGitHub } from '../../../utils/deployment';
-import { Auth } from '../../../utils/types';
+import { Auth } from '../../../utils/types;
 
-const MsgToast = ({ url }: { url: string }) => (
-  <div className="w-full flex items-center justify-center gap-3">
-    Your space is live!
-    <button
-      className="bg-black text-sm block text-white rounded-md px-3 py-1.5 hover:bg-gray-900 cursor-pointer"
-      onClick={() => {
-        window.open(url, "_blank");
-      }}
-    >
-      See Space
-    </button>
-  </div>
-);
+// Removed unused MsgToast component
 
 interface DeployButtonProps {
   code: string;
-  error?: boolean;
-  auth?: Auth;
-  onDeploy?: () => void;
+  onDeploy?: () => void; // Removed unused error and auth props
 }
 
-export const DeployButton = ({ code, error, auth, onDeploy }: DeployButtonProps) => {
+export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
   const [deploying, setDeploying] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState('');
 
