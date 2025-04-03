@@ -12,7 +12,7 @@ import {
 import { toast } from "react-toastify";
 
 import Header from "./header/header";
-import DeployButton from "./deploy-button/deploy-button";
+import { DeployButton } from "./deploy-button/deploy-button";
 import { defaultHTML } from "./../../utils/consts";
 import Tabs from "./tabs/tabs";
 import AskAI from "./ask-ai/ask-ai";

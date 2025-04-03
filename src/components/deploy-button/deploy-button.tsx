@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useCallback } from "react";
-import classNames from "classnames";
+import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { FaPowerOff } from "react-icons/fa6";
 import 'react-toastify/dist/ReactToastify.css';
 
-import SpaceIcon from "@/assets/space.svg";
-import Loading from "../loading/loading";
-import Login from "../login/login";
-import { Auth } from "./../../../utils/types";
-import { deployProviders, deploymentConfig } from '../../../utils/constants';
+import { deployProviders } from '../../../utils/constants';
+import { deployToVercel, deployToNetlify, deployToGitHub } from '../../../utils/deployment';
 
 const MsgToast = ({ url }: { url: string }) => (
   <div className="w-full flex items-center justify-center gap-3">
@@ -25,7 +20,12 @@ const MsgToast = ({ url }: { url: string }) => (
   </div>
 );
 
-export const DeployButton = ({ code, onDeploy }: { code: string; onDeploy?: () => void }) => {
+interface DeployButtonProps {
+  code: string;
+  onDeploy?: () => void;
+}
+
+export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
   const [deploying, setDeploying] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState('');
 
@@ -34,71 +34,44 @@ export const DeployButton = ({ code, onDeploy }: { code: string; onDeploy?: () =
     setSelectedProvider(providerId);
 
     try {
-      let deployUrl = '';
-      
+      let result;
       switch(providerId) {
         case 'vercel':
-          deployUrl = await deployToVercel(code);
+          result = await deployToVercel(code);
           break;
         case 'netlify':
-          deployUrl = await deployToNetlify(code);
+          result = await deployToNetlify(code);
           break;
         case 'github':
-          deployUrl = await deployToGitHub(code);
+          result = await deployToGitHub(code);
           break;
+        default:
+          throw new Error('Invalid provider');
       }
 
-      toast.success(
-        <div className="flex items-center gap-2">
-          <span>Deployment successful!</span>
-          <a 
-            href={deployUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/10 px-3 py-1 rounded hover:bg-white/20"
-          >
-            View Site
-          </a>
-        </div>
-      );
-
-      onDeploy?.();
+      if (result.success) {
+        toast.success(
+          <div className="flex items-center gap-2">
+            <span>Deployment successful!</span>
+            <a 
+              href={result.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white/10 px-3 py-1 rounded hover:bg-white/20"
+            >
+              View Site
+            </a>
+          </div>
+        );
+        onDeploy?.();
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
-      toast.error('Deployment failed. Please try again.');
+      toast.error(`Deployment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setDeploying(false);
       setSelectedProvider('');
-    }
-  };
-
-  const deploymentStatus = useCallback(async (deployUrl: string) => {
-    return new Promise((resolve) => {
-      const checkStatus = setInterval(async () => {
-        try {
-          const response = await fetch(deployUrl);
-          if (response.ok) {
-            clearInterval(checkStatus);
-            resolve(true);
-          }
-        } catch (error) {
-          console.error('Status check failed:', error);
-        }
-      }, 5000);
-    });
-  }, []);
-
-  const handleDeployWithPreview = async (providerId: string) => {
-    setDeploying(true);
-    try {
-      const previewUrl = await handleDeploy(providerId);
-      if (previewUrl) {
-        await deploymentStatus(previewUrl);
-        toast.success(<MsgToast url={previewUrl} />);
-      }
-    } catch (error) {
-      toast.error('Deployment failed');
-    } finally {
-      setDeploying(false);
     }
   };
 

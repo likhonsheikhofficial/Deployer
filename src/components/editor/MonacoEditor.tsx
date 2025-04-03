@@ -27,7 +27,13 @@ const extraSnippets = [
     label: '!html',
     kind: monaco.languages.CompletionItemKind.Snippet,
     insertText: defaultHTML,
-    documentation: 'Basic HTML template'
+    documentation: 'Basic HTML template',
+    range: {
+      startLineNumber: 1,
+      endLineNumber: 1,
+      startColumn: 1,
+      endColumn: 1
+    }
   },
   {
     label: '!log',
@@ -61,7 +67,15 @@ export const MonacoEditor = ({ value, onChange, language = 'html', theme = 'vs-d
         value,
         language,
         theme,
-        ...editorOptions,
+        fontSize: editorOptions.fontSize,
+        minimap: editorOptions.minimap,
+        fontFamily: editorOptions.fontFamily,
+        fontLigatures: editorOptions.fontLigatures,
+        formatOnPaste: editorOptions.formatOnPaste,
+        formatOnType: editorOptions.formatOnType,
+        tabSize: editorOptions.tabSize,
+        wordWrap: 'on' as const,
+        automaticLayout: true
       });
 
       editor.current.onDidChangeModelContent(() => {
@@ -80,8 +94,16 @@ export const MonacoEditor = ({ value, onChange, language = 'html', theme = 'vs-d
 
       // Add advanced code completions
       monaco.languages.registerCompletionItemProvider(language, {
-        provideCompletionItems: () => ({
-          suggestions: extraSnippets
+        provideCompletionItems: (model, position) => ({
+          suggestions: extraSnippets.map(snippet => ({
+            ...snippet,
+            range: {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: position.column,
+              endColumn: position.column
+            }
+          }))
         })
       });
 
@@ -97,7 +119,7 @@ export const MonacoEditor = ({ value, onChange, language = 'html', theme = 'vs-d
 
       return () => editor.current?.dispose();
     }
-  }, []);
+  }, [language, theme]);
 
   useEffect(() => {
     if (editor.current) {
