@@ -184,8 +184,6 @@ function App() {
       >
         <DeployButton 
           code={html}
-          error={error}
-          auth={auth}
           onDeploy={() => {
             toast.success('Deployment started');
           }}

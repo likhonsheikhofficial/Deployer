@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { toast } from "react-toastify"; // Removed ToastContainer
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { deployProviders } from '../../../utils/constants';
 import { deployToVercel, deployToNetlify, deployToGitHub } from '../../../utils/deployment';
-import { Auth } from '../../../utils/types';
-
-// Removed unused MsgToast component
 
 interface DeployButtonProps {
   code: string;
-  onDeploy?: () => void; // Removed unused error and auth props
+  onDeploy?: () => void;
 }
 
 export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
@@ -89,9 +86,6 @@ export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
           )}
         </button>
       ))}
-      <button onClick={deploy} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {isDeploying ? 'Deploying...' : 'Deploy'}
-      </button>
     </div>
   );
 };
