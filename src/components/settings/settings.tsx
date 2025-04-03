@@ -21,6 +21,7 @@ function Settings({
   return (
     <div className="">
       <button
+        title="Settings"
         className="relative overflow-hidden cursor-pointer flex-none flex items-center justify-center rounded-full text-base font-semibold size-8 text-center bg-gray-800 hover:bg-gray-700 text-gray-100 shadow-sm dark:shadow-highlight/20"
         onClick={() => {
           onClose((prev) => !prev);
