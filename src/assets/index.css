@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+* {
+  font-family: "Noto Sans";
+}
+
+.font-code {
+  font-family: "Source Code Pro";
+}
