@@ -29,10 +29,8 @@ function App() {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   const [isResizing, setIsResizing] = useState(false);
-  const [error, setError] = useState(false);
   const [html, setHtml] = useState((htmlStorage as string) ?? defaultHTML);
   const [isAiWorking, setisAiWorking] = useState(false);
-  const [auth, setAuth] = useState<Auth | undefined>(undefined);
   const [currentView, setCurrentView] = useState<"editor" | "preview">(
     "editor"
   );
@@ -41,9 +39,6 @@ function App() {
     const res = await fetch("/api/@me");
     if (res.ok) {
       const data = await res.json();
-      setAuth(data);
-    } else {
-      setAuth(undefined);
     }
   };
 
