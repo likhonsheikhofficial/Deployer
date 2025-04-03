@@ -182,7 +182,14 @@ function App() {
           }
         }}
       >
-        <DeployButton html={html} error={error} auth={auth} />
+        <DeployButton 
+          code={html}
+          error={error}
+          auth={auth}
+          onDeploy={() => {
+            toast.success('Deployment started');
+          }}
+        />
       </Header>
       <main className="max-lg:flex-col flex w-full">
         <div

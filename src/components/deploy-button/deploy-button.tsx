@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { deployProviders } from '../../../utils/constants';
 import { deployToVercel, deployToNetlify, deployToGitHub } from '../../../utils/deployment';
+import { Auth } from '../../../utils/types';
 
 const MsgToast = ({ url }: { url: string }) => (
   <div className="w-full flex items-center justify-center gap-3">
@@ -22,10 +23,12 @@ const MsgToast = ({ url }: { url: string }) => (
 
 interface DeployButtonProps {
   code: string;
+  error?: boolean;
+  auth?: Auth;
   onDeploy?: () => void;
 }
 
-export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
+export const DeployButton = ({ code, error, auth, onDeploy }: DeployButtonProps) => {
   const [deploying, setDeploying] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState('');
 

@@ -78,9 +78,26 @@ export const MonacoEditor = ({ value, onChange, language = 'html', theme = 'vs-d
         automaticLayout: true
       });
 
-      editor.current.onDidChangeModelContent(() => {
-        onChange(editor.current?.getValue() || '');
-      });
+      if (editor.current) {
+        editor.current.onDidChangeModelContent(() => {
+          onChange(editor.current?.getValue() || '');
+        });
+
+        // Add completion provider with proper model check
+        monaco.languages.registerCompletionItemProvider(language, {
+          provideCompletionItems: (_, position) => ({
+            suggestions: extraSnippets.map(snippet => ({
+              ...snippet,
+              range: {
+                startLineNumber: position.lineNumber,
+                endLineNumber: position.lineNumber,
+                startColumn: position.column,
+                endColumn: position.column
+              }
+            }))
+          })
+        });
+      }
 
       // Add custom command for format
       editor.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {
@@ -90,21 +107,6 @@ export const MonacoEditor = ({ value, onChange, language = 'html', theme = 'vs-d
       // Add custom keyboard shortcut for save
       editor.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
         handleSave();
-      });
-
-      // Add advanced code completions
-      monaco.languages.registerCompletionItemProvider(language, {
-        provideCompletionItems: (model, position) => ({
-          suggestions: extraSnippets.map(snippet => ({
-            ...snippet,
-            range: {
-              startLineNumber: position.lineNumber,
-              endLineNumber: position.lineNumber,
-              startColumn: position.column,
-              endColumn: position.column
-            }
-          }))
-        })
       });
 
       // Add error checking marker for demonstration/upcoming advanced validations
