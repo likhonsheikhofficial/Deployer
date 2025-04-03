@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { deployProviders } from '../../../utils/constants';
 import { deployToVercel, deployToNetlify, deployToGitHub } from '../../../utils/deployment';
-import { Auth } from '../../../utils/types;
+import { Auth } from '../../../utils/types';
 
 // Removed unused MsgToast component
 
@@ -89,6 +89,9 @@ export const DeployButton = ({ code, onDeploy }: DeployButtonProps) => {
           )}
         </button>
       ))}
+      <button onClick={deploy} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        {isDeploying ? 'Deploying...' : 'Deploy'}
+      </button>
     </div>
   );
 };
