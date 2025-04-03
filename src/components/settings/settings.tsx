@@ -1,23 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import classNames from "classnames";
-
 import { PiGearSixFill } from "react-icons/pi";
-// @ts-expect-error not needed
-import { PROVIDERS } from "./../../../utils/providers";
 
-function Settings({
-  open,
-  onClose,
-  provider,
-  error,
-  onChange,
-}: {
+interface Provider {
+  name: string;
+  // Add other provider properties as needed
+}
+
+interface SettingsProps {
   open: boolean;
   provider: string;
   error?: string;
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
   onChange: (provider: string) => void;
-}) {
+}
+
+interface Providers {
+  [key: string]: Provider;
+}
+
+declare const PROVIDERS: Providers;
+
+function Settings({ open, onClose, provider, error, onChange }: SettingsProps) {
   return (
     <div className="">
       <button
