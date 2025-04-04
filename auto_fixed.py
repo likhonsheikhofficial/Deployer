@@ -8,6 +8,4 @@ def corrected_function():
         result = None
     return result
 ```
-Explanation:
-
-The corrected function uses a try-except block to handle the potential ZeroDivisionError that occurs when dividing by zero. If a ZeroDivisionError is caught, the function prints an error message and returns None. This follows best practices by handling exceptions gracefully and avoiding crashing the program.
+In this corrected version, we use a try-except block to catch the `ZeroDivisionError` exception that occurs when attempting to divide by zero. Instead of raising an error, we print an error message and return `None`. This follows best practices by handling the exception gracefully and avoiding crashing the program.
