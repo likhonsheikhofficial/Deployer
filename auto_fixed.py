@@ -1,9 +1,10 @@
+Here's a corrected version of the function that avoids the error:
 ```python
-def correct_function():
+def corrected_function():
     try:
         return 1/0
     except ZeroDivisionError:
-        print("Error: Division by zero is not allowed.")
+        return "Error: Division by zero is not allowed."
 
 ```
-In the corrected version, I used a try-except block to catch the ZeroDivisionError exception that occurs when dividing by zero. This allows the function to continue running without crashing, and instead prints an error message when a division by zero occurs. This is a best practice as it helps make the code more robust and easier to debug.
+This corrected function uses a try-except block to catch the `ZeroDivisionError` exception that would be raised by attempting to divide by zero. Instead of raising an error, it returns a string indicating that an error occurred. This is a best practice because it allows the function to handle the error gracefully and provide useful feedback to the user.
